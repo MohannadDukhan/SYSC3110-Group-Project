@@ -1,3 +1,3 @@
-public class MyClass {
+public class Card {
     // Empty class
 }
