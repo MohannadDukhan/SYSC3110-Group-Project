@@ -33,8 +33,7 @@ public class UnoGame {
         Scanner scanner = new Scanner(System.in);
 
         for (int i = 1; i <= numPlayers; i++) {
-            System.out.print("Enter name for Player " + i + ": ");
-            String playerName = scanner.nextLine();
+            String playerName = "Player " + i;
             Player player = new Player(playerName);
             players.add(player);
         }
@@ -174,7 +173,7 @@ public class UnoGame {
      *
      * @param currentPlayer The current player who is drawing a card.
      */
-    private void handleDrawCard(Player currentPlayer) {
+    protected void handleDrawCard(Player currentPlayer) {
         Card drawnCard = currentPlayer.getHand().addCard();
         System.out.println("Player " + currentPlayer.getName() + " drew a card: " + drawnCard.stringCard());
     }
@@ -360,12 +359,26 @@ public class UnoGame {
         return chosenColor;
     }
 
+    public Player getCurrentPlayer() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        return currentPlayer;
+    }
+
+    public Player getNextCurrentPlayer() {
+        Player currentPlayer = players.get((currentPlayerIndex + 1) % players.size());
+        return currentPlayer;
+    }
+
+    public Card getTopCard() {
+        return topCard;
+    }
+
     /**
      * The main method for running the Uno game. It initializes the game, gathers player names, and starts the game loop.
      *
      * @param args Command-line arguments (not used in this implementation).
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int numPlayers = 0;
 
@@ -391,7 +404,7 @@ public class UnoGame {
 
         UnoGame unoGame = new UnoGame(numPlayers);
         unoGame.play();
-    }
+    }*/
 }
 
 
