@@ -16,42 +16,65 @@ public class GameBoardFrame extends JFrame{
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Main panel with BorderLayout to organize sub-panels
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        // Create a split pane for the upper and lower halves
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        splitPane.setResizeWeight(0.5); // Equal resizing for upper and lower halves
 
-        // Player hand panel
-        playerHandPanel = new JPanel(new FlowLayout());
-        mainPanel.add(playerHandPanel, BorderLayout.CENTER);
+        // Upper half panel
+        JPanel upperHalfPanel = new JPanel(new BorderLayout());
 
-        // Top card and draw pile
+        // Current player label (upper half, left)
+        JPanel currentPlayerPanel = new JPanel();
+        currentPlayerLabel = new JLabel();
+        currentPlayerPanel.add(currentPlayerLabel);
+        upperHalfPanel.add(currentPlayerPanel, BorderLayout.WEST);
+
+        // Top card display (upper half, center)
         JPanel topCardPanel = new JPanel();
         topCardLabel = new JLabel();
         topCardPanel.add(topCardLabel);
-        mainPanel.add(topCardPanel, BorderLayout.NORTH);
+        upperHalfPanel.add(topCardPanel, BorderLayout.CENTER);
+
+        // Add the upper half panel to the split pane
+        splitPane.setTopComponent(upperHalfPanel);
+
+        JPanel lowerHalfPanel = new JPanel(new BorderLayout());
+
+        // Player hand panel
+        playerHandPanel = new JPanel(new FlowLayout());
+        lowerHalfPanel.add(playerHandPanel, BorderLayout.CENTER);
+
+        // Messages panel (lower half, left)
+        JPanel messagesPanel = new JPanel(new BorderLayout());
+        JTextArea messagesTextArea = new JTextArea(10, 20); // You can customize the size
+        JScrollPane messagesScrollPane = new JScrollPane(messagesTextArea);
+        messagesPanel.add(messagesScrollPane, BorderLayout.CENTER);
+        lowerHalfPanel.add(messagesPanel, BorderLayout.WEST);
 
         // Action buttons panel
         JPanel actionPanel = new JPanel(new FlowLayout());
         drawButton = new JButton("Draw Card");
         drawButton.addActionListener(new UnoGameController(gameModel));
         actionPanel.add(drawButton);
-        updateTopCardDisplay();
-
-        // Initialize the current player label
-        currentPlayerLabel = new JLabel();
-        mainPanel.add(currentPlayerLabel, BorderLayout.NORTH);
-        updateCurrentPlayerDisplay();
 
 
         nextPlayerButton = new JButton("Next Player");
         nextPlayerButton.addActionListener(new UnoGameController(gameModel));
         actionPanel.add(nextPlayerButton);
 
-        mainPanel.add(actionPanel, BorderLayout.SOUTH);
+        lowerHalfPanel.add(actionPanel, BorderLayout.SOUTH);
+
+        // Add the lower half panel to the split pane
+        splitPane.setBottomComponent(lowerHalfPanel);
 
         // Add the main panel to the frame
-        add(mainPanel);
+        add(splitPane);
         // update the panel with player cards
         updatePlayerHandPanel();
+        // update the panel with top card
+        updateTopCardDisplay();
+        // Update the current player label
+        updateCurrentPlayerDisplay();
     }
 
 
