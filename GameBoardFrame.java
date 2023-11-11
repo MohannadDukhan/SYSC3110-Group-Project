@@ -41,8 +41,10 @@ public class GameBoardFrame extends JFrame{
         JPanel lowerHalfPanel = new JPanel(new BorderLayout());
 
         // Player hand panel
-        playerHandPanel = new JPanel(new FlowLayout());
-        lowerHalfPanel.add(playerHandPanel, BorderLayout.CENTER);
+        playerHandPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JScrollPane scrollPane = new JScrollPane(playerHandPanel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        lowerHalfPanel.add(scrollPane, BorderLayout.CENTER);
 
         // Messages panel (lower half, left)
         JPanel messagesPanel = new JPanel(new BorderLayout());
@@ -79,6 +81,7 @@ public class GameBoardFrame extends JFrame{
 
 
 
+
     // Update the view components as necessary
     public void updateView() {
         // Update player's hand, top card, etc.
@@ -93,10 +96,19 @@ public class GameBoardFrame extends JFrame{
         for (Card card : currentHand.getCards()) {
             // For each card, create a button and set the text to the card's string representation
             JButton cardButton = new JButton(card.stringCard());
-            cardButton.addActionListener(new UnoGameController(gameModel));
 
-            // Optional: Customize the button with colors, images, etc.
-            //customizeCardButton(cardButton, card);
+            //Get Image Path for each card's button
+            ImageIcon cardImage = loadImagePath(card);
+            cardImage.setImage(cardImage.getImage().getScaledInstance(80, 160, Image.SCALE_SMOOTH));
+            cardButton.setIcon(cardImage);
+
+            cardButton.setLayout(new BoxLayout(cardButton, BoxLayout.Y_AXIS));
+
+            JLabel cardLabel = new JLabel(card.stringCard(), SwingConstants.CENTER);
+            cardButton.add(cardLabel);
+
+            cardButton.setPreferredSize(new Dimension(120, 200));
+            cardButton.addActionListener(new UnoGameController(gameModel));
 
             // Add the button to the player hand panel
             playerHandPanel.add(cardButton);
@@ -109,18 +121,41 @@ public class GameBoardFrame extends JFrame{
 
     private void updateTopCardDisplay() {
         Card topCard = gameModel.getTopCard();
+        ImageIcon topCardImage = loadImagePath(topCard);
+
+        // Check if the image was successfully loaded
+        if (topCardImage.getImageLoadStatus() == MediaTracker.COMPLETE) {
+            topCardLabel.setIcon(topCardImage);
+        } else {
+            // Handle image loading failure
+            topCardLabel.setIcon(null);
+            topCardLabel.setText("Image not found");
+        }
         String cardText = topCard.stringCard();
         topCardLabel.setText(cardText);
 
-        // If you have card images, you would set the icon of the label instead
-        // ImageIcon icon = new ImageIcon(getClass().getResource("/path/to/card/images/" + cardText + ".png"));
-        // topCardLabel.setIcon(icon);
     }
 
     private void updateCurrentPlayerDisplay(){
 
         String playerName = gameModel.getCurrentPlayer().getName();
         currentPlayerLabel.setText("Current Player: " + playerName);
+    }
+    private ImageIcon loadImagePath(Card card) {
+        String imagePath;
+
+        if (card.getValue() == Card.Value.WILD || card.getValue() == Card.Value.WILD_DRAW_TWO_CARDS) {
+            imagePath = "unoCards/" + card.getValue().toString().toLowerCase() + "/" + card.getValue().toString() + ".png";
+            System.out.println("Image Path: " + imagePath);
+        }
+        else {
+            imagePath = "unoCards/" + card.getValue().toString().toLowerCase() + "/" + card.getColor().toString().toLowerCase() + ".png";
+            System.out.println("Image Path: " + imagePath);
+        }
+
+        ImageIcon CardImage = new ImageIcon(imagePath);
+
+        return CardImage;
     }
 
     // Main method to start the game GUI
