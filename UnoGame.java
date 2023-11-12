@@ -11,6 +11,8 @@ public class UnoGame {
     private Card topCard;         // The current top card on the deck
     private int currentPlayerIndex; // Index of the current player
     boolean clockwise = true;     // Direction of play (clockwise or counterclockwise)
+    GameBoardFrame view;
+    private Player currentPlayer;
 
     /**
      * Constructs an UnoGame with the specified number of players.
@@ -22,6 +24,11 @@ public class UnoGame {
         initializePlayers(numPlayers);
         currentPlayerIndex = 0;
         topCard = Card.generate_top_card();
+
+    }
+
+    public void addView(GameBoardFrame view) {
+        this.view = view;
     }
 
     /**
@@ -63,7 +70,8 @@ public class UnoGame {
      * @param card The card to check.
      * @return True if the card can be played; otherwise, false.
      */
-    private boolean isValidUnoPlay(Card card) {
+    public boolean isValidUnoPlay(Card card) {
+        System.out.println("is valid reached");
         return card.getColor() == topCard.getColor() || card.getValue() == topCard.getValue();
     }
 
@@ -116,7 +124,7 @@ public class UnoGame {
                 handleDrawCard(currentPlayer);
                 go_next = true;
             } else {
-                go_next = handlePlayCard(scanner, currentPlayer, cardIndex, clockwise);
+                //go_next = handlePlayCard(scanner, currentPlayer, cardIndex, clockwise);
             }
 
             handleUnoStatus(scanner, currentPlayer);
@@ -175,7 +183,8 @@ public class UnoGame {
      */
     protected void handleDrawCard(Player currentPlayer) {
         Card drawnCard = currentPlayer.getHand().addCard();
-        System.out.println("Player " + currentPlayer.getName() + " drew a card: " + drawnCard.stringCard());
+        view.update();
+        //System.out.println("Player " + currentPlayer.getName() + " drew a card: " + drawnCard.stringCard());
     }
 
     /**
@@ -187,7 +196,7 @@ public class UnoGame {
      * @param clockwise     The direction of play (clockwise or counterclockwise).
      * @return True if the play was successful; otherwise, false.
      */
-    private boolean handlePlayCard(Scanner scanner, Player currentPlayer, int cardIndex, boolean clockwise) {
+    /*private boolean handlePlayCard(Scanner scanner, Player currentPlayer, int cardIndex, boolean clockwise) {
         Card selectedCard = currentPlayer.getHand().getCards().get(cardIndex - 1);
         if (selectedCard.getValue() == Card.Value.WILD) {
             return handleWildCard(scanner, currentPlayer, selectedCard);
@@ -203,7 +212,7 @@ public class UnoGame {
             System.out.println("Invalid play. Try again.");
             return false;
         }
-    }
+    }*/
 
     /**
      * Handles Uno status and reminds the player to say Uno if applicable.
@@ -245,17 +254,18 @@ public class UnoGame {
     /**
      * Handles playing a Wild card and allows the player to choose the color.
      *
-     * @param scanner       The input scanner.
+     * @param colour       The input for the colour chosen.
      * @param currentPlayer  The current player.
      * @param selectedCard  The Wild card to play.
      * @return True if the play was successful; otherwise, false.
      */
-    private boolean handleWildCard(Scanner scanner, Player currentPlayer, Card selectedCard) {
-        String chosenColor = getChosenColor(scanner);
-        System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard() + " color chosen: " + chosenColor);
+    public void handleWildCard(Card.Color colour, Player currentPlayer, Card selectedCard) {
+        //String chosenColor = getChosenColor(scanner);
+        //System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard() + " color chosen: " + chosenColor);
         currentPlayer.playCard(selectedCard);
-        topCard = new Card(Card.Color.valueOf(chosenColor), Card.Value.WILD);
-        return true;
+        topCard = new Card(colour, Card.Value.WILD);
+        System.out.println("handleWildCard is reached");
+        view.update();
     }
 
     /**
@@ -267,16 +277,17 @@ public class UnoGame {
      * @param clockwise     The direction of play (clockwise or counterclockwise).
      * @return True if the play was successful; otherwise, false.
      */
-    private boolean handleSkipCard(Player currentPlayer, Card selectedCard, boolean clockwise) {
+    public void handleSkipCard(Player currentPlayer, Card selectedCard, boolean clockwise) {
         if (selectedCard.getColor() == topCard.getColor() || topCard.getValue() == Card.Value.SKIP) {
-            System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard());
+            //System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard());
             currentPlayer.playCard(selectedCard);
             topCard = selectedCard;
             currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
-            return true;
+            view.update();
+            System.out.println("handleSkipCard is reached");
+
         } else {
             System.out.println("Invalid play. The card must match the color of the top card.");
-            return false;
         }
     }
 
@@ -289,16 +300,18 @@ public class UnoGame {
      * @param clockwise     The direction of play (clockwise or counterclockwise).
      * @return True if the play was successful; otherwise, false.
      */
-    private boolean handleReverseCard(Player currentPlayer, Card selectedCard, boolean clockwise) {
+    public void handleReverseCard(Player currentPlayer, Card selectedCard, boolean clockwise) {
         if (selectedCard.getColor() == topCard.getColor() || topCard.getValue() == Card.Value.REVERSE) {
-            System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard());
+            //System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard());
             currentPlayer.playCard(selectedCard);
             topCard = selectedCard;
             this.clockwise = !clockwise;
-            return true;
+            view.update();
+            System.out.println("handleReverseCard is reached");
+
         } else {
             System.out.println("Invalid play. The card must match the color of the top card.");
-            return false;
+
         }
     }
 
@@ -306,23 +319,25 @@ public class UnoGame {
      * Handles playing a Wild Draw Two Cards. If the card matches the color of the top card,
      * it forces the next player to draw two cards and skips their turn.
      *
-     * @param scanner       The input scanner.
+     * @param colour       The input for the colour chosen.
      * @param currentPlayer  The current player.
      * @param selectedCard  The Wild Draw Two Cards to play.
      * @param clockwise     The direction of play (clockwise or counterclockwise).
      * @return True if the play was successful; otherwise, false.
      */
-    private boolean handleWildDrawTwoCards(Scanner scanner, Player currentPlayer, Card selectedCard, boolean clockwise) {
-        String chosenColor = getChosenColor(scanner);
-        System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard() + " color chosen: " + chosenColor);
+    public void handleWildDrawTwoCards(Card.Color colour, Player currentPlayer, Card selectedCard, boolean clockwise) {
+        //String chosenColor = getChosenColor(scanner);
+        //System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard() + " color chosen: " + chosenColor);
         currentPlayer.playCard(selectedCard);
-        topCard = new Card(Card.Color.valueOf(chosenColor), Card.Value.WILD_DRAW_TWO_CARDS);
+        topCard = new Card(colour, Card.Value.WILD_DRAW_TWO_CARDS);
 
         currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
         Player nextPlayer = players.get(currentPlayerIndex);
         nextPlayer.getHand().addCard();
         nextPlayer.getHand().addCard();
-        return true;
+        System.out.println("handleWildDrawTwoCards is reached");
+        view.update();
+
     }
 
     /**
@@ -332,11 +347,12 @@ public class UnoGame {
      * @param selectedCard  The card to play.
      * @return True if the play was successful; otherwise, false.
      */
-    private boolean handleValidPlay(Player currentPlayer, Card selectedCard) {
+    public void handleValidPlay(Player currentPlayer, Card selectedCard) {
         System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard());
         currentPlayer.playCard(selectedCard);
         topCard = selectedCard;
-        return true;
+        view.update();
+
     }
 
     /**
@@ -345,7 +361,7 @@ public class UnoGame {
      * @param scanner The input scanner.
      * @return The chosen color as a string.
      */
-    private String getChosenColor(Scanner scanner) {
+    /*private String getChosenColor(Scanner scanner) {
         String chosenColor;
         while (true) {
             System.out.print("Choose a color (RED, GREEN, BLUE, YELLOW): ");
@@ -357,7 +373,7 @@ public class UnoGame {
             }
         }
         return chosenColor;
-    }
+    }*/
 
     public Player getCurrentPlayer() {
         Player currentPlayer = players.get(currentPlayerIndex);
@@ -365,12 +381,17 @@ public class UnoGame {
     }
 
     public Player getNextCurrentPlayer() {
-        Player currentPlayer = players.get((currentPlayerIndex + 1) % players.size());
+        currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
+        view.update();
         return currentPlayer;
     }
 
     public Card getTopCard() {
         return topCard;
+    }
+
+    public boolean isClockwise() {
+        return clockwise;
     }
 
     /**

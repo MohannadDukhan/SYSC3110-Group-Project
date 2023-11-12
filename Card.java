@@ -88,7 +88,7 @@ public class Card {
      * @return A string representation of the Uno card.
      */
     public String stringCard() {
-        if (value == Value.WILD) {
+        if (value == Value.WILD || value == Value.WILD_DRAW_TWO_CARDS ) {
             return value.toString();
         } else {
             return color.toString() + " " + value.toString();
