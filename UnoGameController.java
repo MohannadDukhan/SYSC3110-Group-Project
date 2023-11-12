@@ -33,7 +33,7 @@ public class UnoGameController  implements ActionListener {
 
         }
         for (Card c : handCards) {
-            if (clickedButton == c.stringCard()) {
+            if (clickedButton.equals(c.stringCard())) {
                 if (c.getValue() == Card.Value.WILD) {
                     gameModel.handleWildCard(chooseColor(), currentPlayer, c);
                     break;
@@ -54,7 +54,6 @@ public class UnoGameController  implements ActionListener {
                     gameModel.handleValidPlay(currentPlayer, c);
                     break;
                 }
-
             }
         }
     }
