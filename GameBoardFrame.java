@@ -9,6 +9,7 @@ public class GameBoardFrame extends JFrame{
     private JLabel topCardLabel;
     private JLabel currentPlayerLabel;
     private UnoGame gameModel;
+    private Player currentPlayer;
 
     public GameBoardFrame(UnoGame game) {
         gameModel = game;
@@ -56,12 +57,12 @@ public class GameBoardFrame extends JFrame{
         // Action buttons panel
         JPanel actionPanel = new JPanel(new FlowLayout());
         drawButton = new JButton("Draw Card");
-        drawButton.addActionListener(new UnoGameController(gameModel));
+        drawButton.addActionListener(new UnoGameController(gameModel, this));
         actionPanel.add(drawButton);
 
 
         nextPlayerButton = new JButton("Next Player");
-        nextPlayerButton.addActionListener(new UnoGameController(gameModel));
+        nextPlayerButton.addActionListener(new UnoGameController(gameModel, this));
         actionPanel.add(nextPlayerButton);
 
         lowerHalfPanel.add(actionPanel, BorderLayout.SOUTH);
@@ -71,21 +72,31 @@ public class GameBoardFrame extends JFrame{
 
         // Add the main panel to the frame
         add(splitPane);
-        // update the panel with player cards
+        // Add this view to the uno game model
+        gameModel.addView(this);
+        /*// update the panel with player cards
         updatePlayerHandPanel();
         // update the panel with top card
         updateTopCardDisplay();
         // Update the current player label
-        updateCurrentPlayerDisplay();
+        updateCurrentPlayerDisplay();*/
+        update();
     }
 
 
 
 
     // Update the view components as necessary
-    public void updateView() {
-        // Update player's hand, top card, etc.
+    public void update(){
+        // update the panel with player cards
+        updatePlayerHandPanel();
+        // update the panel with top card
+        updateTopCardDisplay();
+        // Update the current player label
+        updateCurrentPlayerDisplay();
+
     }
+
 
     public void updatePlayerHandPanel() {
         playerHandPanel.removeAll(); // Clear the existing cards (buttons)
@@ -107,8 +118,8 @@ public class GameBoardFrame extends JFrame{
             JLabel cardLabel = new JLabel(card.stringCard(), SwingConstants.CENTER);
             cardButton.add(cardLabel);
 
-            cardButton.setPreferredSize(new Dimension(120, 200));
-            cardButton.addActionListener(new UnoGameController(gameModel));
+            cardButton.setPreferredSize(new Dimension(120, 150));
+            cardButton.addActionListener(new UnoGameController(gameModel, this));
 
             // Add the button to the player hand panel
             playerHandPanel.add(cardButton);
@@ -138,19 +149,19 @@ public class GameBoardFrame extends JFrame{
 
     private void updateCurrentPlayerDisplay(){
 
-        String playerName = gameModel.getCurrentPlayer().getName();
-        currentPlayerLabel.setText("Current Player: " + playerName);
+        currentPlayer = gameModel.getCurrentPlayer();
+        currentPlayerLabel.setText("Current Player: " + currentPlayer.getName());
     }
     private ImageIcon loadImagePath(Card card) {
         String imagePath;
 
         if (card.getValue() == Card.Value.WILD || card.getValue() == Card.Value.WILD_DRAW_TWO_CARDS) {
             imagePath = "unoCards/" + card.getValue().toString().toLowerCase() + "/" + card.getValue().toString() + ".png";
-            System.out.println("Image Path: " + imagePath);
+            //System.out.println("Image Path: " + imagePath);
         }
         else {
             imagePath = "unoCards/" + card.getValue().toString().toLowerCase() + "/" + card.getColor().toString().toLowerCase() + ".png";
-            System.out.println("Image Path: " + imagePath);
+            //System.out.println("Image Path: " + imagePath);
         }
 
         ImageIcon CardImage = new ImageIcon(imagePath);
