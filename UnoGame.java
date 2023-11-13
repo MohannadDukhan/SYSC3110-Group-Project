@@ -183,6 +183,10 @@ public class UnoGame {
      */
     protected void handleDrawCard(Player currentPlayer) {
         Card drawnCard = currentPlayer.getHand().addCard();
+        view.updateMessages(currentPlayer.getName() + " drew " + drawnCard);
+        view.nextPlayerButton(true);
+        view.drawCardButton(false);
+        view.cardButtons(false);
         view.update();
         //System.out.println("Player " + currentPlayer.getName() + " drew a card: " + drawnCard.stringCard());
     }
@@ -265,6 +269,9 @@ public class UnoGame {
         currentPlayer.playCard(selectedCard);
         topCard = new Card(colour, Card.Value.WILD);
         System.out.println("handleWildCard is reached");
+        view.nextPlayerButton(true);
+        view.drawCardButton(false);
+        view.cardButtons(false);
         view.update();
     }
 
@@ -283,6 +290,9 @@ public class UnoGame {
             currentPlayer.playCard(selectedCard);
             topCard = selectedCard;
             currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
+            view.nextPlayerButton(true);
+            view.drawCardButton(false);
+            view.cardButtons(false);
             view.update();
             System.out.println("handleSkipCard is reached");
 
@@ -306,6 +316,9 @@ public class UnoGame {
             currentPlayer.playCard(selectedCard);
             topCard = selectedCard;
             this.clockwise = !clockwise;
+            view.nextPlayerButton(true);
+            view.drawCardButton(false);
+            view.cardButtons(false);
             view.update();
             System.out.println("handleReverseCard is reached");
 
@@ -336,6 +349,9 @@ public class UnoGame {
         nextPlayer.getHand().addCard();
         nextPlayer.getHand().addCard();
         System.out.println("handleWildDrawTwoCards is reached");
+        view.nextPlayerButton(true);
+        view.drawCardButton(false);
+        view.cardButtons(false);
         view.update();
 
     }
@@ -351,6 +367,9 @@ public class UnoGame {
         System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard());
         currentPlayer.playCard(selectedCard);
         topCard = selectedCard;
+        view.nextPlayerButton(true);
+        view.drawCardButton(false);
+        view.cardButtons(false);
         view.update();
 
     }

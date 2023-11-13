@@ -10,6 +10,8 @@ public class GameBoardFrame extends JFrame{
     private JLabel currentPlayerLabel;
     private UnoGame gameModel;
     private Player currentPlayer;
+    private JTextArea messagesTextArea;
+
 
     public GameBoardFrame(UnoGame game) {
         gameModel = game;
@@ -49,7 +51,7 @@ public class GameBoardFrame extends JFrame{
 
         // Messages panel (lower half, left)
         JPanel messagesPanel = new JPanel(new BorderLayout());
-        JTextArea messagesTextArea = new JTextArea(10, 20); // You can customize the size
+        messagesTextArea = new JTextArea(10, 20); // You can customize the size
         JScrollPane messagesScrollPane = new JScrollPane(messagesTextArea);
         messagesPanel.add(messagesScrollPane, BorderLayout.CENTER);
         lowerHalfPanel.add(messagesPanel, BorderLayout.WEST);
@@ -62,6 +64,7 @@ public class GameBoardFrame extends JFrame{
 
 
         nextPlayerButton = new JButton("Next Player");
+        nextPlayerButton.setEnabled(false);
         nextPlayerButton.addActionListener(new UnoGameController(gameModel, this));
         actionPanel.add(nextPlayerButton);
 
@@ -74,17 +77,26 @@ public class GameBoardFrame extends JFrame{
         add(splitPane);
         // Add this view to the uno game model
         gameModel.addView(this);
-        /*// update the panel with player cards
-        updatePlayerHandPanel();
-        // update the panel with top card
-        updateTopCardDisplay();
-        // Update the current player label
-        updateCurrentPlayerDisplay();*/
+
         update();
     }
+    public void nextPlayerButton(Boolean bool){
+        this.nextPlayerButton.setEnabled(bool);
+    }
 
+    public void drawCardButton(Boolean bool){
+        this.drawButton.setEnabled(bool);
+    }
 
-
+    public void cardButtons(Boolean bool){
+        Component[] components = playerHandPanel.getComponents();
+        for (Component component: components) {
+            if (component instanceof JButton) {
+                JButton button = (JButton) component;
+                button.setEnabled(bool);
+            }
+        }
+    }
 
     // Update the view components as necessary
     public void update(){
@@ -145,6 +157,11 @@ public class GameBoardFrame extends JFrame{
         String cardText = topCard.stringCard();
         topCardLabel.setText(cardText);
 
+    }
+
+    public void updateMessages(String message) {
+        messagesTextArea.setText("");
+        messagesTextArea.append(message + "\n");
     }
 
     private void updateCurrentPlayerDisplay(){

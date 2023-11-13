@@ -30,6 +30,8 @@ public class UnoGameController  implements ActionListener {
         }
         if (clickedButton == "Next Player") {
             currentPlayer = gameModel.getNextCurrentPlayer();
+            gameView.nextPlayerButton(false);
+            gameView.drawCardButton(true);
 
         }
         for (Card c : handCards) {
@@ -53,6 +55,10 @@ public class UnoGameController  implements ActionListener {
                 if (gameModel.isValidUnoPlay(c)) {
                     gameModel.handleValidPlay(currentPlayer, c);
                     break;
+                }
+                else {
+                    gameView.updateMessages("Invalid play");
+                    gameView.drawCardButton(true);
                 }
             }
         }
