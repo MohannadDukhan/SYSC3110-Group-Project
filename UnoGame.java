@@ -374,26 +374,6 @@ public class UnoGame {
 
     }
 
-    /**
-     * Gets the chosen color when playing a Wild card or Wild Draw Two Cards.
-     *
-     * @param scanner The input scanner.
-     * @return The chosen color as a string.
-     */
-    /*private String getChosenColor(Scanner scanner) {
-        String chosenColor;
-        while (true) {
-            System.out.print("Choose a color (RED, GREEN, BLUE, YELLOW): ");
-            chosenColor = scanner.next().toUpperCase();
-            if (chosenColor.equals("RED") || chosenColor.equals("GREEN") || chosenColor.equals("BLUE") || chosenColor.equals("YELLOW")) {
-                break;
-            } else {
-                System.out.println("Invalid color. Please choose a valid color.");
-            }
-        }
-        return chosenColor;
-    }*/
-
     public Player getCurrentPlayer() {
         Player currentPlayer = players.get(currentPlayerIndex);
         return currentPlayer;
