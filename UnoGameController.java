@@ -32,6 +32,7 @@ public class UnoGameController  implements ActionListener {
             currentPlayer = gameModel.getNextCurrentPlayer();
             gameView.nextPlayerButton(false);
             gameView.drawCardButton(true);
+            gameView.updateMessages("Choose a card or draw a card");
 
         }
         for (Card c : handCards) {

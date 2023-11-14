@@ -10,7 +10,9 @@ public class GameBoardFrame extends JFrame{
     private JLabel currentPlayerLabel;
     private UnoGame gameModel;
     private Player currentPlayer;
+    private JPanel messagesPanel;
     private JTextArea messagesTextArea;
+    private JLabel imageLabel;
 
 
     public GameBoardFrame(UnoGame game) {
@@ -50,11 +52,12 @@ public class GameBoardFrame extends JFrame{
         lowerHalfPanel.add(scrollPane, BorderLayout.CENTER);
 
         // Messages panel (lower half, left)
-        JPanel messagesPanel = new JPanel(new BorderLayout());
+        messagesPanel = new JPanel(new BorderLayout());
         messagesTextArea = new JTextArea(10, 20); // You can customize the size
         JScrollPane messagesScrollPane = new JScrollPane(messagesTextArea);
         messagesPanel.add(messagesScrollPane, BorderLayout.CENTER);
         lowerHalfPanel.add(messagesPanel, BorderLayout.WEST);
+        imageLabel = null;
 
         // Action buttons panel
         JPanel actionPanel = new JPanel(new FlowLayout());
@@ -92,6 +95,7 @@ public class GameBoardFrame extends JFrame{
         Component[] components = playerHandPanel.getComponents();
         for (Component component: components) {
             if (component instanceof JButton) {
+
                 JButton button = (JButton) component;
                 button.setEnabled(bool);
             }
@@ -162,6 +166,27 @@ public class GameBoardFrame extends JFrame{
     public void updateMessages(String message) {
         messagesTextArea.setText("");
         messagesTextArea.append(message + "\n");
+        if (imageLabel != null) {
+            messagesPanel.remove(imageLabel);
+            messagesPanel.revalidate();
+            messagesPanel.repaint();
+        }
+    }
+
+    public void updateDrawCardMessagePanel(String message, Card drawnCard) {
+        messagesTextArea.setText("");
+        messagesTextArea.append(message + "\n");
+
+        if (drawnCard != null) {
+            // Assuming you have a JLabel to display the image
+            ImageIcon cardImage = loadImagePath(drawnCard);
+            imageLabel = new JLabel(cardImage);
+
+            // Add the image to the messages panel
+            messagesPanel.add(imageLabel, BorderLayout.NORTH);
+            messagesPanel.revalidate();
+            messagesPanel.repaint();
+        }
     }
 
     private void updateCurrentPlayerDisplay(){
@@ -169,7 +194,7 @@ public class GameBoardFrame extends JFrame{
         currentPlayer = gameModel.getCurrentPlayer();
         currentPlayerLabel.setText("Current Player: " + currentPlayer.getName());
     }
-    private ImageIcon loadImagePath(Card card) {
+    protected ImageIcon loadImagePath(Card card) {
         String imagePath;
 
         if (card.getValue() == Card.Value.WILD || card.getValue() == Card.Value.WILD_DRAW_TWO_CARDS) {

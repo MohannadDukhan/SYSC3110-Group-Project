@@ -183,11 +183,11 @@ public class UnoGame {
      */
     protected void handleDrawCard(Player currentPlayer) {
         Card drawnCard = currentPlayer.getHand().addCard();
-        view.updateMessages(currentPlayer.getName() + " drew " + drawnCard);
+        view.updateDrawCardMessagePanel("Player " + currentPlayer.getName() + " drew a card: ",drawnCard);
         view.nextPlayerButton(true);
         view.drawCardButton(false);
-        view.cardButtons(false);
         view.update();
+        view.cardButtons(false);
         //System.out.println("Player " + currentPlayer.getName() + " drew a card: " + drawnCard.stringCard());
     }
 
@@ -272,6 +272,7 @@ public class UnoGame {
         view.nextPlayerButton(true);
         view.drawCardButton(false);
         view.cardButtons(false);
+        view.updateMessages(colour + " has been chosen. Player " + currentPlayerIndex + " has to draw place a " + colour + "colour card");
         view.update();
     }
 
@@ -292,12 +293,12 @@ public class UnoGame {
             currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
             view.nextPlayerButton(true);
             view.drawCardButton(false);
-            view.cardButtons(false);
             view.update();
-            System.out.println("handleSkipCard is reached");
+            view.cardButtons(false);
+
 
         } else {
-            System.out.println("Invalid play. The card must match the color of the top card.");
+            view.updateMessages("Invalid play. The card must match the color of the top card.");
         }
     }
 
@@ -318,12 +319,10 @@ public class UnoGame {
             this.clockwise = !clockwise;
             view.nextPlayerButton(true);
             view.drawCardButton(false);
-            view.cardButtons(false);
             view.update();
-            System.out.println("handleReverseCard is reached");
-
+            view.cardButtons(false);
         } else {
-            System.out.println("Invalid play. The card must match the color of the top card.");
+            view.updateMessages("Invalid play. The card must match the color of the top card.");
 
         }
     }
@@ -351,9 +350,9 @@ public class UnoGame {
         System.out.println("handleWildDrawTwoCards is reached");
         view.nextPlayerButton(true);
         view.drawCardButton(false);
-        view.cardButtons(false);
+        view.updateMessages(colour + " has been chosen. Player " + currentPlayerIndex + " has to draw 2 cards. due to wild draw two");
         view.update();
-
+        view.cardButtons(false);
     }
 
     /**
@@ -369,8 +368,8 @@ public class UnoGame {
         topCard = selectedCard;
         view.nextPlayerButton(true);
         view.drawCardButton(false);
-        view.cardButtons(false);
         view.update();
+        view.cardButtons(false);
 
     }
 
