@@ -13,6 +13,7 @@ public class GameBoardFrame extends JFrame{
     private JPanel messagesPanel;
     private JTextArea messagesTextArea;
     private JLabel imageLabel;
+    private boolean Dark = false;
 
 
     public GameBoardFrame(UnoGame game) {
@@ -124,8 +125,14 @@ public class GameBoardFrame extends JFrame{
             // For each card, create a button and set the text to the card's string representation
             JButton cardButton = new JButton(card.stringCard());
 
-            //Get Image Path for each card's button
-            ImageIcon cardImage = loadImagePath(card);
+            ImageIcon cardImage;
+            if (Dark){
+                //Get dark Image Path for each card's button
+                cardImage = loadDarkImagePath(card);
+            } else{
+                //Get Image Path for each card's button
+                cardImage = loadImagePath(card);
+            }
             cardImage.setImage(cardImage.getImage().getScaledInstance(80, 160, Image.SCALE_SMOOTH));
             cardButton.setIcon(cardImage);
 
@@ -148,7 +155,14 @@ public class GameBoardFrame extends JFrame{
 
     private void updateTopCardDisplay() {
         Card topCard = gameModel.getTopCard();
-        ImageIcon topCardImage = loadImagePath(topCard);
+        ImageIcon topCardImage;
+        if (Dark){
+            //Get dark Image Path for each card's button
+            topCardImage = loadDarkImagePath(topCard);
+        } else{
+            //Get Image Path for each card's button
+            topCardImage = loadImagePath(topCard);
+        }
 
         // Check if the image was successfully loaded
         if (topCardImage.getImageLoadStatus() == MediaTracker.COMPLETE) {
@@ -179,7 +193,14 @@ public class GameBoardFrame extends JFrame{
 
         if (drawnCard != null) {
             // Assuming you have a JLabel to display the image
-            ImageIcon cardImage = loadImagePath(drawnCard);
+            ImageIcon cardImage;
+            if (Dark){
+                //Get dark Image Path for each card's button
+                cardImage = loadDarkImagePath(drawnCard);
+            } else{
+                //Get Image Path for each card's button
+                cardImage = loadImagePath(drawnCard);
+            }
             imageLabel = new JLabel(cardImage);
 
             // Add the image to the messages panel
@@ -205,6 +226,16 @@ public class GameBoardFrame extends JFrame{
             imagePath = "unoCards/" + card.getValue().toString().toLowerCase() + "/" + card.getColor().toString().toLowerCase() + ".png";
             //System.out.println("Image Path: " + imagePath);
         }
+
+        ImageIcon CardImage = new ImageIcon(imagePath);
+
+        return CardImage;
+    }
+
+    protected ImageIcon loadDarkImagePath(Card card) {
+        String imagePath;
+
+        imagePath = "dark/" + card.getColor().toString().toLowerCase() + "_" + card.getValue().toString().toLowerCase() + ".png";
 
         ImageIcon CardImage = new ImageIcon(imagePath);
 

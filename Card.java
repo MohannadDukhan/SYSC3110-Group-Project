@@ -5,14 +5,25 @@ import java.util.Random;
  */
 public class Card {
     /**
-     * Enum for the possible values of Uno cards, including numbers, special cards, and wild cards.
+     * Enum for the possible values of light Uno cards, including numbers, special cards, and wild cards.
      */
-    public enum Value { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, SKIP, WILD, WILD_DRAW_TWO_CARDS }
+    public enum Value { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, SKIP, WILD, WILD_DRAW_TWO_CARDS, SKIP_EVERYONE, DRAW_FIVE }
 
     /**
      * Enum for the possible colors of Uno cards.
      */
     public enum Color { RED, GREEN, BLUE, YELLOW }
+
+    /**
+     * Enum for the possible values of dark Uno cards, including numbers, special cards, and wild cards.
+     */
+    public enum DarkValue { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP, SKIP_EVERYONE, DRAW_FIVE }
+
+    /**
+     * Enum for the possible dark colors of Uno cards.
+     */
+    public enum DarkColor {ORANGE, PINK, PURPLE, TEAL }
+
 
     private final Value value;  // The value of the card.
     private final Color color;  // The color of the card.
