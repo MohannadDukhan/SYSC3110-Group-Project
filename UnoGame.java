@@ -13,6 +13,9 @@ public class UnoGame {
     boolean clockwise = true;     // Direction of play (clockwise or counterclockwise)
     GameBoardFrame view;
     private Player currentPlayer;
+    private boolean Dark = false;
+
+
 
     /**
      * Constructs an UnoGame with the specified number of players.
@@ -182,7 +185,7 @@ public class UnoGame {
      * @param currentPlayer The current player who is drawing a card.
      */
     protected void handleDrawCard(Player currentPlayer) {
-        Card drawnCard = currentPlayer.getHand().addCard();
+        Card drawnCard = currentPlayer.getHand().addLightCard();
         view.updateDrawCardMessagePanel("Player " + currentPlayer.getName() + " drew a card: ",drawnCard);
         view.nextPlayerButton(true);
         view.drawCardButton(false);
@@ -249,8 +252,8 @@ public class UnoGame {
             calculateScoreForWinningPlayer(currentPlayer);
         } else {
             System.out.println("Player " + currentPlayer.getName() + " did not say Uno and draws 2 cards.");
-            currentPlayer.getHand().addCard();
-            currentPlayer.getHand().addCard();
+            currentPlayer.getHand().addLightCard();
+            currentPlayer.getHand().addLightCard();
             currentPlayer.setRemindedUno(false);
         }
     }
@@ -345,8 +348,8 @@ public class UnoGame {
 
         currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
         Player nextPlayer = players.get(currentPlayerIndex);
-        nextPlayer.getHand().addCard();
-        nextPlayer.getHand().addCard();
+        nextPlayer.getHand().addLightCard();
+        nextPlayer.getHand().addLightCard();
         System.out.println("handleWildDrawTwoCards is reached");
         view.nextPlayerButton(true);
         view.drawCardButton(false);
@@ -390,6 +393,10 @@ public class UnoGame {
 
     public boolean isClockwise() {
         return clockwise;
+    }
+
+    public boolean isDark() {
+        return Dark;
     }
 
     /**

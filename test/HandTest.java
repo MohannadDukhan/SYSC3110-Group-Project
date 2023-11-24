@@ -13,7 +13,7 @@ public class HandTest {
     public void addCard() {
         Hand hand = new Hand();
         int initialSize = hand.getNumCards();
-        Card addedCard = hand.addCard();
+        Card addedCard = hand.addLightCard();
         int newSize = hand.getNumCards();
         assertEquals("Adding a card should increase the size by 1", initialSize + 1, newSize);
         assertTrue("Hand should contain the added card", hand.getCards().contains(addedCard));

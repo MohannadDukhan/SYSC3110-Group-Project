@@ -13,7 +13,7 @@ public class GameBoardFrame extends JFrame{
     private JPanel messagesPanel;
     private JTextArea messagesTextArea;
     private JLabel imageLabel;
-    private boolean Dark = false;
+
 
 
     public GameBoardFrame(UnoGame game) {
@@ -126,7 +126,7 @@ public class GameBoardFrame extends JFrame{
             JButton cardButton = new JButton(card.stringCard());
 
             ImageIcon cardImage;
-            if (Dark){
+            if (gameModel.isDark()){
                 //Get dark Image Path for each card's button
                 cardImage = loadDarkImagePath(card);
             } else{
@@ -156,7 +156,7 @@ public class GameBoardFrame extends JFrame{
     private void updateTopCardDisplay() {
         Card topCard = gameModel.getTopCard();
         ImageIcon topCardImage;
-        if (Dark){
+        if (gameModel.isDark()){
             //Get dark Image Path for each card's button
             topCardImage = loadDarkImagePath(topCard);
         } else{
@@ -194,7 +194,7 @@ public class GameBoardFrame extends JFrame{
         if (drawnCard != null) {
             // Assuming you have a JLabel to display the image
             ImageIcon cardImage;
-            if (Dark){
+            if (gameModel.isDark()){
                 //Get dark Image Path for each card's button
                 cardImage = loadDarkImagePath(drawnCard);
             } else{

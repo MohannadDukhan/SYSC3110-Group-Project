@@ -7,17 +7,25 @@ public class Card {
     /**
      * Enum for the possible values of light Uno cards, including numbers, special cards, and wild cards.
      */
-    public enum Value { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, SKIP, WILD, WILD_DRAW_TWO_CARDS, SKIP_EVERYONE, DRAW_FIVE }
+    public enum Value { ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, SKIP, WILD, FLIP, WILD_DRAW_TWO_CARDS, SKIP_EVERYONE, DRAW_FIVE }
 
     /**
      * Enum for the possible colors of Uno cards.
      */
-    public enum Color { RED, GREEN, BLUE, YELLOW }
+    public enum Color { RED, GREEN, BLUE, YELLOW, ORANGE, PINK, PURPLE, TEAL }
+
+    public enum LightValue { ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP, SKIP, WILD, WILD_DRAW_TWO_CARDS }
+
+    /**
+     * Enum for the possible colors of Uno cards.
+     */
+    public enum LightColor { RED, GREEN, BLUE, YELLOW }
+
 
     /**
      * Enum for the possible values of dark Uno cards, including numbers, special cards, and wild cards.
      */
-    public enum DarkValue { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP, SKIP_EVERYONE, DRAW_FIVE }
+    public enum DarkValue { ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP, WILD, SKIP_EVERYONE, DRAW_FIVE }
 
     /**
      * Enum for the possible dark colors of Uno cards.
@@ -31,10 +39,19 @@ public class Card {
     /**
      * Constructs a random Uno card with a random color and value.
      */
-    public Card() {
+    public static Card LightCard() {
         Random random = new Random();
-        this.color = Color.values()[random.nextInt(Color.values().length)];
-        this.value = Value.values()[random.nextInt(Value.values().length)];
+        Color LightC =  Color.valueOf((LightColor.values()[random.nextInt(LightColor.values().length)]).toString());
+        Value LightV = Value.valueOf((LightValue.values()[random.nextInt(LightValue.values().length)]).toString());
+        return new Card(LightC,LightV);
+    }
+
+    public static Card DarkCard() {
+        Random random = new Random();
+        Color DarkC =  Color.valueOf((DarkColor.values()[random.nextInt(DarkColor.values().length)]).toString());
+        Value DarkV = Value.valueOf((DarkValue.values()[random.nextInt(DarkValue.values().length)]).toString());
+        return new Card(DarkC,DarkV);
+
     }
 
     /**
@@ -48,16 +65,18 @@ public class Card {
         this.value = value;
     }
 
+
+
     /**
      * Generates a random Uno card to be used as the top card, excluding special cards.
      *
      * @return A random Uno card.
      */
     public static Card generate_top_card() {
-        Card card;
+        Card card = null;
         Random random = new Random();
         do {
-            card = new Card();
+            card = card.LightCard();
         } while (card.isSpecialCard());
         return card;
     }
