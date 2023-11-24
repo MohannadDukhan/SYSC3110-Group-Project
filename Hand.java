@@ -5,9 +5,9 @@ import java.util.ArrayList;
  */
 public class Hand {
     private int start_cards = 7;  // The initial number of cards in the hand.
-    private ArrayList<Card> cards;  // The list of cards in the hand.
-
-    private ArrayList<Card> DarkCards;  // The list of cards in the hand.
+    private static ArrayList<Card> cards;  // The list of cards in the hand.
+    private static ArrayList<Card> DarkCards;  // The list of Darkcards in the hand.
+    private static ArrayList<Card> LightCards;  // The list of Darkcards in the hand.
     private int num_cards;  // The number of cards currently in the hand.
 
     /**
@@ -21,8 +21,8 @@ public class Hand {
         }
     }
 
-    public Hand(ArrayList<Card> cards) {
-        this.cards = cards;
+    public Hand(ArrayList<Card> Newcards) {
+        this.cards = Newcards;
     }
 
     /**
@@ -33,7 +33,13 @@ public class Hand {
     public Card addLightCard() {
         cards.add(Card.LightCard());
         num_cards += 1;
-        return cards.get(num_cards - 1);
+        return cards.get(cards.size() - 1);
+    }
+
+    public Card addDarkCard() {
+        cards.add(Card.DarkCard());
+        num_cards += 1;
+        return cards.get(cards.size() - 1);
     }
 
     /**
@@ -73,29 +79,56 @@ public class Hand {
         return num_cards;
     }
 
-    public ArrayList<Card> ToDarkCards(){
+    public static ArrayList<Card> ToDarkCards(){
+        Hand.DarkCards = new ArrayList<Card>();
         for (Card c: cards){
             if(c.getValue() == Card.Value.REVERSE ) {
-                DarkCards.add(new Card(c.getColor(), Card.Value.REVERSE));
+                Hand.DarkCards.add(new Card(c.getColor(), Card.Value.REVERSE));
             } else if(c.getValue() == Card.Value.FLIP){
-                DarkCards.add(new Card(c.getColor(), Card.Value.FLIP));
+                Hand.DarkCards.add(new Card(c.getColor(), Card.Value.FLIP));
             } else if(c.getValue() == Card.Value.SKIP){
-                DarkCards.add(new Card(c.getColor(), Card.Value.SKIP_EVERYONE));
+                Hand.DarkCards.add(new Card(c.getColor(), Card.Value.SKIP_EVERYONE));
             } else if(c.getValue() == Card.Value.WILD){
-                DarkCards.add(new Card(c.getColor(), Card.Value.WILD));
+                Hand.DarkCards.add(new Card(c.getColor(), Card.Value.WILD));
             } else if(c.getValue() == Card.Value.WILD_DRAW_TWO_CARDS){
-                DarkCards.add(new Card(c.getColor(), Card.Value.DRAW_FIVE));
+                Hand.DarkCards.add(new Card(c.getColor(), Card.Value.DRAW_FIVE));
             } else if(c.getColor() == Card.Color.BLUE){
-                DarkCards.add(new Card(Card.Color.PINK, c.getValue()));
+                Hand.DarkCards.add(new Card(Card.Color.PINK, c.getValue()));
             } else if (c.getColor() == Card.Color.YELLOW) {
-                DarkCards.add(new Card(Card.Color.PURPLE, c.getValue()));
+                Hand.DarkCards.add(new Card(Card.Color.PURPLE, c.getValue()));
             } else if (c.getColor() == Card.Color.RED) {
-                DarkCards.add(new Card(Card.Color.ORANGE, c.getValue()));
+                Hand.DarkCards.add(new Card(Card.Color.ORANGE, c.getValue()));
             } else if (c.getColor() == Card.Color.GREEN) {
-                DarkCards.add(new Card(Card.Color.TEAL, c.getValue()));
+                Hand.DarkCards.add(new Card(Card.Color.TEAL, c.getValue()));
             }
         }
-        return DarkCards;
+        return Hand.DarkCards;
+    }
+
+    public static ArrayList<Card> ToLightCards(){
+        Hand.LightCards = new ArrayList<Card>();
+        for (Card c: cards){
+            if(c.getValue() == Card.Value.REVERSE ) {
+                Hand.LightCards.add(new Card(c.getColor(), Card.Value.REVERSE));
+            } else if(c.getValue() == Card.Value.FLIP){
+                Hand.LightCards.add(new Card(c.getColor(), Card.Value.FLIP));
+            } else if(c.getValue() == Card.Value.SKIP_EVERYONE){
+                Hand.LightCards.add(new Card(c.getColor(), Card.Value.SKIP));
+            } else if(c.getValue() == Card.Value.WILD){
+                Hand.LightCards.add(new Card(c.getColor(), Card.Value.WILD));
+            } else if(c.getValue() == Card.Value.DRAW_FIVE){
+                Hand.LightCards.add(new Card(c.getColor(), Card.Value.WILD_DRAW_TWO_CARDS));
+            } else if(c.getColor() == Card.Color.PINK){
+                Hand.LightCards.add(new Card(Card.Color.BLUE, c.getValue()));
+            } else if (c.getColor() == Card.Color.PURPLE) {
+                Hand.LightCards.add(new Card(Card.Color.YELLOW, c.getValue()));
+            } else if (c.getColor() == Card.Color.ORANGE) {
+                Hand.LightCards.add(new Card(Card.Color.RED, c.getValue()));
+            } else if (c.getColor() == Card.Color.TEAL) {
+                Hand.LightCards.add(new Card(Card.Color.GREEN, c.getValue()));
+            }
+        }
+        return Hand.LightCards;
     }
 }
 

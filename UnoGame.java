@@ -13,7 +13,7 @@ public class UnoGame {
     boolean clockwise = true;     // Direction of play (clockwise or counterclockwise)
     GameBoardFrame view;
     private Player currentPlayer;
-    private boolean Dark = false;
+    private static boolean Dark = false;
 
 
 
@@ -185,41 +185,19 @@ public class UnoGame {
      * @param currentPlayer The current player who is drawing a card.
      */
     protected void handleDrawCard(Player currentPlayer) {
-        Card drawnCard = currentPlayer.getHand().addLightCard();
-        view.updateDrawCardMessagePanel("Player " + currentPlayer.getName() + " drew a card: ",drawnCard);
+        Card drawnCard = null;
+        if(isDark()){
+            drawnCard = currentPlayer.getHand().addDarkCard();
+        }else{
+            drawnCard = currentPlayer.getHand().addLightCard();
+        }
+        view.updateDrawCardMessagePanel("Player " + currentPlayer.getName() + " drew a card: ", drawnCard);
         view.nextPlayerButton(true);
         view.drawCardButton(false);
         view.update();
         view.cardButtons(false);
         //System.out.println("Player " + currentPlayer.getName() + " drew a card: " + drawnCard.stringCard());
     }
-
-    /**
-     * Handles playing a card from the player's hand.
-     *
-     * @param scanner       The input scanner.
-     * @param currentPlayer  The current player.
-     * @param cardIndex     The index of the card to play.
-     * @param clockwise     The direction of play (clockwise or counterclockwise).
-     * @return True if the play was successful; otherwise, false.
-     */
-    /*private boolean handlePlayCard(Scanner scanner, Player currentPlayer, int cardIndex, boolean clockwise) {
-        Card selectedCard = currentPlayer.getHand().getCards().get(cardIndex - 1);
-        if (selectedCard.getValue() == Card.Value.WILD) {
-            return handleWildCard(scanner, currentPlayer, selectedCard);
-        } else if (selectedCard.getValue() == Card.Value.SKIP) {
-            return handleSkipCard(currentPlayer, selectedCard, clockwise);
-        } else if (selectedCard.getValue() == Card.Value.REVERSE) {
-            return handleReverseCard(currentPlayer, selectedCard, clockwise);
-        } else if (selectedCard.getValue() == Card.Value.WILD_DRAW_TWO_CARDS && selectedCard.getColor() == topCard.getColor()) {
-            return handleWildDrawTwoCards(scanner, currentPlayer, selectedCard, clockwise);
-        } else if (isValidUnoPlay(selectedCard)) {
-            return handleValidPlay(currentPlayer, selectedCard);
-        } else {
-            System.out.println("Invalid play. Try again.");
-            return false;
-        }
-    }*/
 
     /**
      * Handles Uno status and reminds the player to say Uno if applicable.
@@ -399,38 +377,19 @@ public class UnoGame {
         return Dark;
     }
 
-    /**
-     * The main method for running the Uno game. It initializes the game, gathers player names, and starts the game loop.
-     *
-     * @param args Command-line arguments (not used in this implementation).
-     */
-    /*public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int numPlayers = 0;
-
-        while (true) {
-            System.out.println("How many players? ");
-
-            if (scanner.hasNextInt()) {
-                numPlayers = scanner.nextInt();
-
-                if (numPlayers >= 2 && numPlayers <= 4) {
-                    break; // Valid input, exit the loop
-                } else {
-                    System.out.println("Please choose a number between 2 and 4.");
-                }
-            } else {
-                // Input is not an integer, consume the invalid input
-                scanner.nextLine();
-                System.out.println("Invalid input. Please enter a valid number of players.");
+    public void Flip(){
+        for(Player p: players) {
+            if(isDark()){
+                p.toLightHand();
+            } else{
+                p.toDarkHand();
             }
         }
+        System.out.printf("reached flip in uno game\n");
+       this.Dark = (isDark() ? false : true);
+       view.update();
+    }
 
-        System.out.println("You selected " + numPlayers + " players.");
-
-        UnoGame unoGame = new UnoGame(numPlayers);
-        unoGame.play();
-    }*/
 }
 
 

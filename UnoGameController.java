@@ -40,24 +40,22 @@ public class UnoGameController  implements ActionListener {
                 if (c.getValue() == Card.Value.WILD) {
                     gameModel.handleWildCard(chooseColor(), currentPlayer, c);
                     break;
-                }
-                if (c.getValue() == Card.Value.WILD_DRAW_TWO_CARDS) {
+                }else if (c.getValue() == Card.Value.FLIP && c.getColor() == gameModel.getTopCard().getColor()) {
+                    gameModel.Flip();
+                    break;
+                }else if (c.getValue() == Card.Value.WILD_DRAW_TWO_CARDS) {
                     gameModel.handleWildDrawTwoCards(chooseColor(), currentPlayer, c, gameModel.isClockwise());
                     break;
-                }
-                if (c.getValue() == Card.Value.SKIP && c.getColor() == gameModel.getTopCard().getColor()) {
+                }else if (c.getValue() == Card.Value.SKIP && c.getColor() == gameModel.getTopCard().getColor()) {
                     gameModel.handleSkipCard(currentPlayer, c, gameModel.isClockwise());
                     break;
-                }
-                if (c.getValue() == Card.Value.REVERSE && c.getColor() == gameModel.getTopCard().getColor()) {
+                }else if (c.getValue() == Card.Value.REVERSE && c.getColor() == gameModel.getTopCard().getColor()) {
                     gameModel.handleReverseCard(currentPlayer, c, gameModel.isClockwise());
                     break;
-                }
-                if (gameModel.isValidUnoPlay(c)) {
+                }else if (gameModel.isValidUnoPlay(c)) {
                     gameModel.handleValidPlay(currentPlayer, c);
                     break;
-                }
-                else {
+                }else {
                     gameView.updateMessages("Invalid play");
                     gameView.drawCardButton(true);
                 }

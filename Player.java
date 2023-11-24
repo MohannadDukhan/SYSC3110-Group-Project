@@ -80,7 +80,7 @@ public class Player {
      * Draws a card and adds it to the player's hand.
      */
     public void drawCard() {
-        hand.addCard();
+        hand.addLightCard();
     }
 
     /**
@@ -152,6 +152,15 @@ public class Player {
         } else {
             System.out.println(getName() + " tried to say UNO, but they have more than one card left.");
         }
+    }
+
+    public void toDarkHand(){
+        System.out.printf("reached to dark in player\n");
+        this.hand = new Hand(Hand.ToDarkCards());
+    }
+
+    public void toLightHand(){
+        this.hand = new Hand(Hand.ToLightCards());
     }
 
 
