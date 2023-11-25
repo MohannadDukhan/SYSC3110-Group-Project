@@ -79,9 +79,9 @@ public class Player {
     /**
      * Draws a card and adds it to the player's hand.
      */
-    public void drawCard() {
-        hand.addCard();
-    }
+    //public void drawCard() {
+        //hand.addCard();
+    //}
 
     /**
      * Plays a card from the player's hand.

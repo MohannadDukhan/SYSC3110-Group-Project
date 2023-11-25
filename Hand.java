@@ -14,7 +14,8 @@ public class Hand {
     public Hand() {
         cards = new ArrayList<Card>();
         for (int i = 0; i < start_cards; i++) {
-            cards.add(new Card());
+            Card card = new Card("LIGHT");
+            cards.add(card);
             num_cards += 1;
         }
     }
@@ -24,8 +25,8 @@ public class Hand {
      *
      * @return The card added to the hand.
      */
-    public Card addCard() {
-        cards.add(new Card());
+    public Card addCard(String side) {
+        cards.add(new Card(side));
         num_cards += 1;
         return cards.get(num_cards - 1);
     }

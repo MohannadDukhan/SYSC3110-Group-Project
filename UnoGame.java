@@ -13,6 +13,7 @@ public class UnoGame {
     boolean clockwise = true;     // Direction of play (clockwise or counterclockwise)
     GameBoardFrame view;
     private Player currentPlayer;
+    private String side;
 
     /**
      * Constructs an UnoGame with the specified number of players.
@@ -24,6 +25,7 @@ public class UnoGame {
         initializePlayers(numPlayers);
         currentPlayerIndex = 0;
         topCard = Card.generate_top_card();
+        side = "LIGHT";
 
     }
 
@@ -72,7 +74,15 @@ public class UnoGame {
      */
     public boolean isValidUnoPlay(Card card) {
         System.out.println("is valid reached");
-        return card.getColor() == topCard.getColor() || card.getValue() == topCard.getValue();
+        if(side.equals("LIGHT")) {
+            return card.getColor() == topCard.getColor() || card.getValue() == topCard.getValue();
+        }
+        else if(side.equals("DARK")){
+            return card.getDarkColor() == topCard.getDarkColor() || card.getDarkValue() == topCard.getDarkValue();
+        }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -182,7 +192,7 @@ public class UnoGame {
      * @param currentPlayer The current player who is drawing a card.
      */
     protected void handleDrawCard(Player currentPlayer) {
-        Card drawnCard = currentPlayer.getHand().addCard();
+        Card drawnCard = currentPlayer.getHand().addCard(side);
         view.updateDrawCardMessagePanel("Player " + currentPlayer.getName() + " drew a card: ",drawnCard);
         view.nextPlayerButton(true);
         view.drawCardButton(false);
@@ -249,8 +259,8 @@ public class UnoGame {
             calculateScoreForWinningPlayer(currentPlayer);
         } else {
             System.out.println("Player " + currentPlayer.getName() + " did not say Uno and draws 2 cards.");
-            currentPlayer.getHand().addCard();
-            currentPlayer.getHand().addCard();
+            currentPlayer.getHand().addCard(side);
+            currentPlayer.getHand().addCard(side);
             currentPlayer.setRemindedUno(false);
         }
     }
@@ -267,13 +277,43 @@ public class UnoGame {
         //String chosenColor = getChosenColor(scanner);
         //System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard() + " color chosen: " + chosenColor);
         currentPlayer.playCard(selectedCard);
-        topCard = new Card(colour, Card.Value.WILD);
+        topCard = new Card(colour, Card.Value.WILD, side);
         System.out.println("handleWildCard is reached");
         view.nextPlayerButton(true);
         view.drawCardButton(false);
-        view.cardButtons(false);
         view.updateMessages(colour + " has been chosen. Player " + currentPlayerIndex + " has to draw place a " + colour + "colour card");
         view.update();
+        view.cardButtons(false);
+    }
+    public void handleDarkWildCard(Card.DarkColor colour, Player currentPlayer, Card selectedCard) {
+        //String chosenColor = getChosenColor(scanner);
+        //System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard() + " color chosen: " + chosenColor);
+        currentPlayer.playCard(selectedCard);
+        //topCard = selectedCard.createDarkCard(colour, Card.DarkValue.WILD, side);
+        System.out.println("handleWildCard is reached");
+        view.nextPlayerButton(true);
+        view.drawCardButton(false);
+        view.updateMessages(colour + " has been chosen. Player " + currentPlayerIndex + " has to draw place a " + colour + "colour card");
+        view.update();
+        view.cardButtons(false);
+    }
+    public void handleFlipCard(Player currentPlayer, Card c) {
+        side = (side.equals("LIGHT")) ? "DARK" : "LIGHT";
+
+        currentPlayer.playCard(c);
+        topCard = c;
+        System.out.println("Reached handleFlipCard");
+        view.nextPlayerButton(true);
+        view.drawCardButton(false);
+        view.updateMessages("CARDS HAVE BEEN FLIPPED");
+        view.update();
+        view.cardButtons(false);
+
+        for (Player player: players) {
+            for (Card card: player.getHand().getCards()){
+                card.setCurrentside(side);
+            }
+        }
     }
 
     /**
@@ -297,6 +337,25 @@ public class UnoGame {
             view.cardButtons(false);
 
 
+        } else {
+            view.updateMessages("Invalid play. The card must match the color of the top card.");
+        }
+    }
+
+    public void handleDarkSkipCard(Player currentPlayer, Card selectedCard, boolean clockwise) {
+        if (selectedCard.getDarkColor() == topCard.getDarkColor() || topCard.getDarkValue() == Card.DarkValue.SKIP_EVERYONE) {
+            //System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard());
+            currentPlayer.playCard(selectedCard);
+            topCard = selectedCard;
+            for (int i = 0; i < players.size() - 1; i++) {
+                currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
+                Player skippedPlayer = players.get(currentPlayerIndex);
+                System.out.println("Player " + skippedPlayer.getName() + " is skipped!");
+            }
+            view.nextPlayerButton(true);
+            view.drawCardButton(false);
+            view.update();
+            view.cardButtons(false);
         } else {
             view.updateMessages("Invalid play. The card must match the color of the top card.");
         }
@@ -341,16 +400,32 @@ public class UnoGame {
         //String chosenColor = getChosenColor(scanner);
         //System.out.println("Player " + currentPlayer.getName() + " plays: " + selectedCard.stringCard() + " color chosen: " + chosenColor);
         currentPlayer.playCard(selectedCard);
-        topCard = new Card(colour, Card.Value.WILD_DRAW_TWO_CARDS);
+        topCard = new Card(colour, Card.Value.WILD_DRAW_TWO_CARDS,side);
 
         currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
         Player nextPlayer = players.get(currentPlayerIndex);
-        nextPlayer.getHand().addCard();
-        nextPlayer.getHand().addCard();
+        nextPlayer.getHand().addCard(side);
+        nextPlayer.getHand().addCard(side);
         System.out.println("handleWildDrawTwoCards is reached");
         view.nextPlayerButton(true);
         view.drawCardButton(false);
         view.updateMessages(colour + " has been chosen. Player " + currentPlayerIndex + " has to draw 2 cards. due to wild draw two");
+        view.update();
+        view.cardButtons(false);
+    }
+
+    public void handleDarkDrawFive(Player currentPlayer, Card c, boolean clockwise) {
+        currentPlayer.playCard(c);
+        topCard = c;
+        currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
+        Player nextPlayer = players.get(currentPlayerIndex);
+        nextPlayer.getHand().addCard(side);
+        nextPlayer.getHand().addCard(side);
+        nextPlayer.getHand().addCard(side);
+        nextPlayer.getHand().addCard(side);
+        nextPlayer.getHand().addCard(side);
+        view.nextPlayerButton(true);
+        view.drawCardButton(false);
         view.update();
         view.cardButtons(false);
     }
@@ -390,6 +465,9 @@ public class UnoGame {
 
     public boolean isClockwise() {
         return clockwise;
+    }
+    public String getSide(){
+        return this.side;
     }
 
     /**

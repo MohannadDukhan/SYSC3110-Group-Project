@@ -13,14 +13,14 @@ public class GameBoardFrame extends JFrame{
     private JPanel messagesPanel;
     private JTextArea messagesTextArea;
     private JLabel imageLabel;
-    private boolean Dark = false;
-
+    private boolean dark;
 
     public GameBoardFrame(UnoGame game) {
         gameModel = game;
         setTitle("Uno Game");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
 
         // Create a split pane for the upper and lower halves
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -118,27 +118,34 @@ public class GameBoardFrame extends JFrame{
     public void updatePlayerHandPanel() {
         playerHandPanel.removeAll(); // Clear the existing cards (buttons)
 
+        if (gameModel.getSide().equals("LIGHT")){
+            dark = false;
+        }
+        else {
+            dark = true;
+        }
         // Get the current player's hand
         Hand currentHand = gameModel.getCurrentPlayer().getHand();
 
         for (Card card : currentHand.getCards()) {
             // For each card, create a button and set the text to the card's string representation
-            JButton cardButton = new JButton(card.stringCard());
-
+            JButton cardButton = new JButton();
             ImageIcon cardImage;
-            if (Dark){
+            JLabel cardLabel = new JLabel(card.stringCard(), SwingConstants.CENTER);
+            if (dark){
                 //Get dark Image Path for each card's button
+                cardButton.setText(card.stringDarkCard());
                 cardImage = loadDarkImagePath(card);
+                cardLabel = new JLabel(card.stringDarkCard(), SwingConstants.CENTER);
             } else{
                 //Get Image Path for each card's button
+                cardButton.setText(card.stringCard());
                 cardImage = loadImagePath(card);
             }
             cardImage.setImage(cardImage.getImage().getScaledInstance(80, 160, Image.SCALE_SMOOTH));
             cardButton.setIcon(cardImage);
 
             cardButton.setLayout(new BoxLayout(cardButton, BoxLayout.Y_AXIS));
-
-            JLabel cardLabel = new JLabel(card.stringCard(), SwingConstants.CENTER);
             cardButton.add(cardLabel);
 
             cardButton.setPreferredSize(new Dimension(120, 150));
@@ -156,9 +163,11 @@ public class GameBoardFrame extends JFrame{
     private void updateTopCardDisplay() {
         Card topCard = gameModel.getTopCard();
         ImageIcon topCardImage;
-        if (Dark){
+        String cardText = topCard.stringCard();
+        if (dark){
             //Get dark Image Path for each card's button
             topCardImage = loadDarkImagePath(topCard);
+            cardText = topCard.stringDarkCard();
         } else{
             //Get Image Path for each card's button
             topCardImage = loadImagePath(topCard);
@@ -172,7 +181,6 @@ public class GameBoardFrame extends JFrame{
             topCardLabel.setIcon(null);
             topCardLabel.setText("Image not found");
         }
-        String cardText = topCard.stringCard();
         topCardLabel.setText(cardText);
 
     }
@@ -194,7 +202,7 @@ public class GameBoardFrame extends JFrame{
         if (drawnCard != null) {
             // Assuming you have a JLabel to display the image
             ImageIcon cardImage;
-            if (Dark){
+            if (dark){
                 //Get dark Image Path for each card's button
                 cardImage = loadDarkImagePath(drawnCard);
             } else{
@@ -222,6 +230,7 @@ public class GameBoardFrame extends JFrame{
             imagePath = "unoCards/" + card.getValue().toString().toLowerCase() + "/" + card.getValue().toString() + ".png";
             //System.out.println("Image Path: " + imagePath);
         }
+
         else {
             imagePath = "unoCards/" + card.getValue().toString().toLowerCase() + "/" + card.getColor().toString().toLowerCase() + ".png";
             //System.out.println("Image Path: " + imagePath);
@@ -235,7 +244,7 @@ public class GameBoardFrame extends JFrame{
     protected ImageIcon loadDarkImagePath(Card card) {
         String imagePath;
 
-        imagePath = "dark/" + card.getColor().toString().toLowerCase() + "_" + card.getValue().toString().toLowerCase() + ".png";
+        imagePath = "dark/" + card.getDarkColor().toString().toLowerCase() + "_" + card.getDarkValue().toString().toLowerCase() + ".png";
 
         ImageIcon CardImage = new ImageIcon(imagePath);
 
@@ -274,7 +283,7 @@ public class GameBoardFrame extends JFrame{
         // Ideally, pass unoGame to the view
         GameBoardFrame view = new GameBoardFrame(unoGame);
         view.setVisible(true);
-
+        view.dark = false;
 
         // Start the game logic if needed
          unoGame.play();
