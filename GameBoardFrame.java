@@ -18,7 +18,7 @@ public class GameBoardFrame extends JFrame{
     public GameBoardFrame(UnoGame game) {
         gameModel = game;
         setTitle("Uno Game");
-        setSize(800, 600);
+        setSize(1200, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
@@ -243,9 +243,11 @@ public class GameBoardFrame extends JFrame{
 
     protected ImageIcon loadDarkImagePath(Card card) {
         String imagePath;
-
-        imagePath = "dark/" + card.getDarkColor().toString().toLowerCase() + "_" + card.getDarkValue().toString().toLowerCase() + ".png";
-
+        if (card.getValue() == Card.Value.WILD) {
+            imagePath = "dark/" + card.getDarkValue().toString().toLowerCase() + ".png";
+        } else {
+            imagePath = "dark/" + card.getDarkColor().toString().toLowerCase() + "_" + card.getDarkValue().toString().toLowerCase() + ".png";
+        }
         ImageIcon CardImage = new ImageIcon(imagePath);
 
         return CardImage;

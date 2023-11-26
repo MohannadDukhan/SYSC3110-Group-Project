@@ -7,7 +7,7 @@ public class Card {
     /**
      * Enum for the possible values of light Uno cards, including numbers, special cards, and wild cards.
      */
-    public enum Value { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP,  SKIP, WILD, WILD_DRAW_TWO_CARDS}
+    public enum Value { ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP,  SKIP, WILD, WILD_DRAW_TWO_CARDS}
 
     /**
      * Enum for the possible colors of Uno cards.
@@ -17,7 +17,7 @@ public class Card {
     /**
      * Enum for the possible values of dark Uno cards, including numbers, special cards, and wild cards.
      */
-    public enum DarkValue { ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP, SKIP_EVERYONE, WILD, DRAW_FIVE }
+    public enum DarkValue { ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP, SKIP_EVERYONE, WILD, DRAW_FIVE }
 
     /**
      * Enum for the possible dark colors of Uno cards.
@@ -88,7 +88,6 @@ public class Card {
             case SEVEN: return DarkValue.SEVEN;
             case EIGHT: return DarkValue.EIGHT;
             case NINE: return DarkValue.NINE;
-            case ZERO: return DarkValue.ZERO;
         }
         return null;
     }
@@ -109,7 +108,6 @@ public class Card {
             case SEVEN: return Value.SEVEN;
             case EIGHT: return Value.EIGHT;
             case NINE: return Value.NINE;
-            case ZERO: return Value.ZERO;
         }
         return null;
     }
