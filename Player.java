@@ -30,6 +30,12 @@ public class Player {
     public String getName() {
         return name;
     }
+    public Boolean isAi(){
+        if(name.contains("AI")){
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Gets the player's current score.

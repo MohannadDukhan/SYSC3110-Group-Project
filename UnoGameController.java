@@ -30,11 +30,23 @@ public class UnoGameController  implements ActionListener {
         }
         if (clickedButton == "Next Player") {
             currentPlayer = gameModel.getNextCurrentPlayer();
-            gameView.nextPlayerButton(false);
-            gameView.drawCardButton(true);
-            gameView.updateMessages("Choose a card or draw a card");
-
+            System.out.println(currentPlayer.getName());
+            if (gameModel.checkAiPlayer(currentPlayer)) {
+                gameModel.handleAiTurn(currentPlayer);
+                gameView.nextPlayerButton(true);
+                gameView.drawCardButton(false);
+                gameView.cardButtons(false);
+                gameView.updateMessages("Reached inside checking ai player controller");
+                System.out.println("Reached checking ai controller");
+            }
+            else {
+                gameView.nextPlayerButton(false);
+                gameView.drawCardButton(true);
+                gameView.updateMessages("Choose a card or draw a card");
+            }
         }
+
+
         for (Card c : handCards) {
             if(c.getCurrentside().equals("LIGHT")) {
                 if (clickedButton.equals(c.stringCard())) {

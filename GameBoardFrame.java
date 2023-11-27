@@ -112,6 +112,7 @@ public class GameBoardFrame extends JFrame{
         // Update the current player label
         updateCurrentPlayerDisplay();
 
+
     }
 
 
@@ -278,8 +279,32 @@ public class GameBoardFrame extends JFrame{
             System.exit(0); // Exit or repeat the process
         }
 
+        String numAistr = JOptionPane.showInputDialog(null,
+                "How many AI? (0-2)",
+                "Number of AI",
+                JOptionPane.QUESTION_MESSAGE);
+        int numAi = 0;
+
+        // Validate and parse the input
+        try {
+            numAi = Integer.parseInt(numAistr);
+            if (numAi < 0 || numAi > 2) {
+                JOptionPane.showMessageDialog(null,
+                        "Please choose a number between 0 and 2.",
+                        "Invalid Number",
+                        JOptionPane.ERROR_MESSAGE);
+                System.exit(0); // Exit or repeat the process
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Invalid input. Please enter a number.",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
+            System.exit(0); // Exit or repeat the process
+        }
+
         // Start the game with the specified number of players
-        UnoGame unoGame = new UnoGame(numPlayers);
+        UnoGame unoGame = new UnoGame(numPlayers, numAi);
         // Ideally, pass unoGame to the view
         GameBoardFrame view = new GameBoardFrame(unoGame);
         view.setVisible(true);
@@ -289,4 +314,7 @@ public class GameBoardFrame extends JFrame{
          unoGame.play();
     }
 
+    public void endGame() {
+        JOptionPane.showMessageDialog(this,"This player won");
+    }
 }

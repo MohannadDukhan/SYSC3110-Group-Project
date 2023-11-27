@@ -20,9 +20,9 @@ public class UnoGame {
      *
      * @param numPlayers The number of players in the game (2 to 4).
      */
-    public UnoGame(int numPlayers) {
+    public UnoGame(int numPlayers, int numAi) {
         players = new ArrayList<>();
-        initializePlayers(numPlayers);
+        initializePlayers(numPlayers, numAi);
         currentPlayerIndex = 0;
         topCard = Card.generate_top_card();
         side = "LIGHT";
@@ -38,14 +38,38 @@ public class UnoGame {
      *
      * @param numPlayers The number of players in the game.
      */
-    private void initializePlayers(int numPlayers) {
+    private void initializePlayers(int numPlayers, int numAi) {
         Scanner scanner = new Scanner(System.in);
 
-        for (int i = 1; i <= numPlayers; i++) {
+        for (int i = 1; i <= numPlayers - numAi; i++) {
             String playerName = "Player " + i;
             Player player = new Player(playerName);
             players.add(player);
         }
+        for (int i = 1; i <= numAi; i++) {
+            String playerName = "AI " + i;
+            Player player = new Player(playerName);
+            players.add(player);
+        }
+    }
+    public boolean checkAiPlayer(Player player){
+        System.out.println("Reached checkAiPlayer");
+        currentPlayer = player;
+        if (currentPlayer.isAi()){
+            return true;
+        }
+        return false;
+    }
+
+    public void handleAiTurn(Player currentPlayer){
+        Hand playerHand = currentPlayer.getHand();
+        for(Card card: playerHand.getCards()) {
+            if(isValidUnoPlay(card)){
+                handleValidPlay(currentPlayer,card);
+                return;
+            }
+        }
+        handleDrawCard(currentPlayer);
     }
 
     /**
@@ -142,12 +166,16 @@ public class UnoGame {
             if (currentPlayer.getHand().getNumCards() == 0) {
                 handleWinOrPenalty(currentPlayer);
                 gameRunning = currentPlayer.getHand().getNumCards() != 0;
+                System.out.println("num cards = 0");
+                go_next = false;
+
             }
 
             if (go_next) {
                 currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
             }
         }
+        view.endGame();
     }
 
     /**
@@ -445,7 +473,16 @@ public class UnoGame {
         view.drawCardButton(false);
         view.update();
         view.cardButtons(false);
-
+        check_end_game(currentPlayer);
+    }
+    public void check_end_game(Player currentPlayer){
+        if (currentPlayer.getHand().getNumCards() == 0) {
+            view.nextPlayerButton(false);
+            view.drawCardButton(false);
+            view.cardButtons(false);
+            view.updateMessages(currentPlayer.getName() + " has won the game");
+            view.endGame();
+        }
     }
 
     public Player getCurrentPlayer() {
@@ -456,7 +493,7 @@ public class UnoGame {
     public Player getNextCurrentPlayer() {
         currentPlayerIndex = (currentPlayerIndex + (clockwise ? 1 : -1) + players.size()) % players.size();
         view.update();
-        return currentPlayer;
+        return players.get(currentPlayerIndex);
     }
 
     public Card getTopCard() {
