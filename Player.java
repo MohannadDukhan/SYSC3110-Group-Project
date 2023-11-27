@@ -1,5 +1,6 @@
 /**
  * Represents a player in the Uno card game.
+ *
  * @version 1.0
  */
 public class Player {
@@ -30,8 +31,9 @@ public class Player {
     public String getName() {
         return name;
     }
-    public Boolean isAi(){
-        if(name.contains("AI")){
+
+    public Boolean isAi() {
+        if (name.contains("AI")) {
             return true;
         }
         return false;
@@ -82,12 +84,6 @@ public class Player {
         this.unoCalled = unoCalled;
     }
 
-    /**
-     * Draws a card and adds it to the player's hand.
-     */
-    //public void drawCard() {
-        //hand.addCard();
-    //}
 
     /**
      * Plays a card from the player's hand.

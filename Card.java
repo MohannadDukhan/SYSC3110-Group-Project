@@ -7,22 +7,23 @@ public class Card {
     /**
      * Enum for the possible values of light Uno cards, including numbers, special cards, and wild cards.
      */
-    public enum Value { ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP,  SKIP, WILD, WILD_DRAW_TWO_CARDS}
+    public enum Value {ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP, SKIP, WILD, WILD_DRAW_TWO_CARDS}
 
     /**
      * Enum for the possible colors of Uno cards.
      */
-    public enum Color { RED, GREEN, BLUE, YELLOW }
+    public enum Color {RED, GREEN, BLUE, YELLOW}
 
     /**
      * Enum for the possible values of dark Uno cards, including numbers, special cards, and wild cards.
      */
-    public enum DarkValue { ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP, SKIP_EVERYONE, WILD, DRAW_FIVE }
+    public enum DarkValue {ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, REVERSE, FLIP, SKIP_EVERYONE, WILD, DRAW_FIVE}
 
     /**
      * Enum for the possible dark colors of Uno cards.
      */
-    public enum DarkColor {ORANGE, PINK, PURPLE, TEAL }
+    public enum DarkColor {ORANGE, PINK, PURPLE, TEAL}
+
     public enum CardSide {
         LIGHT, DARK
     }
@@ -54,60 +55,97 @@ public class Card {
     }
 
     private DarkColor getOppositeColorToDark() {
-        switch (color){
-            case YELLOW: return DarkColor.PURPLE;
-            case BLUE: return DarkColor.PINK;
-            case RED: return DarkColor.ORANGE;
-            case GREEN: return DarkColor.TEAL;
+        switch (color) {
+            case YELLOW:
+                return DarkColor.PURPLE;
+            case BLUE:
+                return DarkColor.PINK;
+            case RED:
+                return DarkColor.ORANGE;
+            case GREEN:
+                return DarkColor.TEAL;
         }
         return null;
     }
+
     private Color getOppositeColorToLight() {
-        switch (darkColor){
-            case PURPLE: return Color.YELLOW;
-            case PINK: return Color.BLUE;
-            case ORANGE: return Color.RED;
-            case TEAL: return Color.GREEN;
+        switch (darkColor) {
+            case PURPLE:
+                return Color.YELLOW;
+            case PINK:
+                return Color.BLUE;
+            case ORANGE:
+                return Color.RED;
+            case TEAL:
+                return Color.GREEN;
         }
         return null;
     }
 
     private DarkValue getOppositeValueToDark() {
-        switch (value){
-            case FLIP: return DarkValue.FLIP;
-            case REVERSE: return DarkValue.REVERSE;
-            case WILD: return DarkValue.WILD;
-            case SKIP: return DarkValue.SKIP_EVERYONE;
-            case WILD_DRAW_TWO_CARDS: return DarkValue.DRAW_FIVE;
-            case ONE: return DarkValue.ONE;
-            case TWO: return DarkValue.TWO;
-            case THREE: return DarkValue.THREE;
-            case FOUR: return DarkValue.FOUR;
-            case FIVE: return DarkValue.FIVE;
-            case SIX: return DarkValue.SIX;
-            case SEVEN: return DarkValue.SEVEN;
-            case EIGHT: return DarkValue.EIGHT;
-            case NINE: return DarkValue.NINE;
+        switch (value) {
+            case FLIP:
+                return DarkValue.FLIP;
+            case REVERSE:
+                return DarkValue.REVERSE;
+            case WILD:
+                return DarkValue.WILD;
+            case SKIP:
+                return DarkValue.SKIP_EVERYONE;
+            case WILD_DRAW_TWO_CARDS:
+                return DarkValue.DRAW_FIVE;
+            case ONE:
+                return DarkValue.ONE;
+            case TWO:
+                return DarkValue.TWO;
+            case THREE:
+                return DarkValue.THREE;
+            case FOUR:
+                return DarkValue.FOUR;
+            case FIVE:
+                return DarkValue.FIVE;
+            case SIX:
+                return DarkValue.SIX;
+            case SEVEN:
+                return DarkValue.SEVEN;
+            case EIGHT:
+                return DarkValue.EIGHT;
+            case NINE:
+                return DarkValue.NINE;
         }
         return null;
     }
 
     private Value getOppositeValueToLight() {
-        switch (darkValue){
-            case FLIP: return Value.FLIP;
-            case REVERSE: return Value.REVERSE;
-            case WILD: return Value.WILD;
-            case SKIP_EVERYONE: return Value.SKIP;
-            case DRAW_FIVE: return Value.WILD_DRAW_TWO_CARDS;
-            case ONE: return Value.ONE;
-            case TWO: return Value.TWO;
-            case THREE: return Value.THREE;
-            case FOUR: return Value.FOUR;
-            case FIVE: return Value.FIVE;
-            case SIX: return Value.SIX;
-            case SEVEN: return Value.SEVEN;
-            case EIGHT: return Value.EIGHT;
-            case NINE: return Value.NINE;
+        switch (darkValue) {
+            case FLIP:
+                return Value.FLIP;
+            case REVERSE:
+                return Value.REVERSE;
+            case WILD:
+                return Value.WILD;
+            case SKIP_EVERYONE:
+                return Value.SKIP;
+            case DRAW_FIVE:
+                return Value.WILD_DRAW_TWO_CARDS;
+            case ONE:
+                return Value.ONE;
+            case TWO:
+                return Value.TWO;
+            case THREE:
+                return Value.THREE;
+            case FOUR:
+                return Value.FOUR;
+            case FIVE:
+                return Value.FIVE;
+            case SIX:
+                return Value.SIX;
+            case SEVEN:
+                return Value.SEVEN;
+            case EIGHT:
+                return Value.EIGHT;
+            case NINE:
+                return Value.NINE;
         }
         return null;
     }
@@ -161,6 +199,7 @@ public class Card {
     public Color getColor() {
         return color;
     }
+
     public DarkColor getDarkColor() {
         return darkColor;
     }
@@ -173,6 +212,7 @@ public class Card {
     public Value getValue() {
         return value;
     }
+
     public DarkValue getDarkValue() {
         return darkValue;
     }
@@ -180,6 +220,7 @@ public class Card {
     public String getCurrentside() {
         return this.currentSide;
     }
+
     public void setCurrentside(String side) {
         this.currentSide = side;
     }
@@ -191,12 +232,13 @@ public class Card {
      * @return A string representation of the Uno card.
      */
     public String stringCard() {
-        if (value == Value.WILD || value == Value.WILD_DRAW_TWO_CARDS ) {
+        if (value == Value.WILD || value == Value.WILD_DRAW_TWO_CARDS) {
             return value.toString();
         } else {
             return color.toString() + " " + value.toString();
         }
     }
+
     public String stringDarkCard() {
         if (darkValue == DarkValue.WILD) {
             return darkValue.toString();
