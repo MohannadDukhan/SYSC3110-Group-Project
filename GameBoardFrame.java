@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class GameBoardFrame extends JFrame{
+public class GameBoardFrame extends JFrame {
     private JButton drawButton;
     private JButton nextPlayerButton;
     private JPanel playerHandPanel;
@@ -84,17 +84,18 @@ public class GameBoardFrame extends JFrame{
 
         update();
     }
-    public void nextPlayerButton(Boolean bool){
+
+    public void nextPlayerButton(Boolean bool) {
         this.nextPlayerButton.setEnabled(bool);
     }
 
-    public void drawCardButton(Boolean bool){
+    public void drawCardButton(Boolean bool) {
         this.drawButton.setEnabled(bool);
     }
 
-    public void cardButtons(Boolean bool){
+    public void cardButtons(Boolean bool) {
         Component[] components = playerHandPanel.getComponents();
-        for (Component component: components) {
+        for (Component component : components) {
             if (component instanceof JButton) {
 
                 JButton button = (JButton) component;
@@ -104,7 +105,7 @@ public class GameBoardFrame extends JFrame{
     }
 
     // Update the view components as necessary
-    public void update(){
+    public void update() {
         // update the panel with player cards
         updatePlayerHandPanel();
         // update the panel with top card
@@ -119,10 +120,9 @@ public class GameBoardFrame extends JFrame{
     public void updatePlayerHandPanel() {
         playerHandPanel.removeAll(); // Clear the existing cards (buttons)
 
-        if (gameModel.getSide().equals("LIGHT")){
+        if (gameModel.getSide().equals("LIGHT")) {
             dark = false;
-        }
-        else {
+        } else {
             dark = true;
         }
         // Get the current player's hand
@@ -133,12 +133,12 @@ public class GameBoardFrame extends JFrame{
             JButton cardButton = new JButton();
             ImageIcon cardImage;
             JLabel cardLabel = new JLabel(card.stringCard(), SwingConstants.CENTER);
-            if (dark){
+            if (dark) {
                 //Get dark Image Path for each card's button
                 cardButton.setText(card.stringDarkCard());
                 cardImage = loadDarkImagePath(card);
                 cardLabel = new JLabel(card.stringDarkCard(), SwingConstants.CENTER);
-            } else{
+            } else {
                 //Get Image Path for each card's button
                 cardButton.setText(card.stringCard());
                 cardImage = loadImagePath(card);
@@ -165,11 +165,11 @@ public class GameBoardFrame extends JFrame{
         Card topCard = gameModel.getTopCard();
         ImageIcon topCardImage;
         String cardText = topCard.stringCard();
-        if (dark){
+        if (dark) {
             //Get dark Image Path for each card's button
             topCardImage = loadDarkImagePath(topCard);
             cardText = topCard.stringDarkCard();
-        } else{
+        } else {
             //Get Image Path for each card's button
             topCardImage = loadImagePath(topCard);
         }
@@ -203,10 +203,10 @@ public class GameBoardFrame extends JFrame{
         if (drawnCard != null) {
             // Assuming you have a JLabel to display the image
             ImageIcon cardImage;
-            if (dark){
+            if (dark) {
                 //Get dark Image Path for each card's button
                 cardImage = loadDarkImagePath(drawnCard);
-            } else{
+            } else {
                 //Get Image Path for each card's button
                 cardImage = loadImagePath(drawnCard);
             }
@@ -219,22 +219,19 @@ public class GameBoardFrame extends JFrame{
         }
     }
 
-    private void updateCurrentPlayerDisplay(){
+    private void updateCurrentPlayerDisplay() {
 
         currentPlayer = gameModel.getCurrentPlayer();
         currentPlayerLabel.setText("Current Player: " + currentPlayer.getName());
     }
+
     protected ImageIcon loadImagePath(Card card) {
         String imagePath;
 
         if (card.getValue() == Card.Value.WILD || card.getValue() == Card.Value.WILD_DRAW_TWO_CARDS) {
             imagePath = "unoCards/" + card.getValue().toString().toLowerCase() + "/" + card.getValue().toString() + ".png";
-            //System.out.println("Image Path: " + imagePath);
-        }
-
-        else {
+        } else {
             imagePath = "unoCards/" + card.getValue().toString().toLowerCase() + "/" + card.getColor().toString().toLowerCase() + ".png";
-            //System.out.println("Image Path: " + imagePath);
         }
 
         ImageIcon CardImage = new ImageIcon(imagePath);
@@ -313,10 +310,10 @@ public class GameBoardFrame extends JFrame{
         view.dark = false;
 
         // Start the game logic if needed
-         unoGame.play();
+        unoGame.play();
     }
 
     public void endGame() {
-        JOptionPane.showMessageDialog(this,"This player won");
+        JOptionPane.showMessageDialog(this, "This player won");
     }
 }

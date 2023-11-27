@@ -4,11 +4,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
-public class UnoGameController  implements ActionListener {
+public class UnoGameController implements ActionListener {
     UnoGame gameModel;
     GameBoardFrame gameView;
     Player currentPlayer;
-
 
 
     public UnoGameController(UnoGame game, GameBoardFrame view) {
@@ -38,8 +37,7 @@ public class UnoGameController  implements ActionListener {
                 gameView.cardButtons(false);
                 gameView.updateMessages("Reached inside checking ai player controller");
                 System.out.println("Reached checking ai controller");
-            }
-            else {
+            } else {
                 gameView.nextPlayerButton(false);
                 gameView.drawCardButton(true);
                 gameView.updateMessages("Choose a card or draw a card");
@@ -48,7 +46,7 @@ public class UnoGameController  implements ActionListener {
 
 
         for (Card c : handCards) {
-            if(c.getCurrentside().equals("LIGHT")) {
+            if (c.getCurrentside().equals("LIGHT")) {
                 if (clickedButton.equals(c.stringCard())) {
                     if (c.getValue() == Card.Value.WILD) {
                         gameModel.handleWildCard(chooseColor(), currentPlayer, c);
