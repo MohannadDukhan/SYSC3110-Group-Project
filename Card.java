@@ -149,7 +149,8 @@ public class Card {
         return value == Value.WILD ||
                 value == Value.WILD_DRAW_TWO_CARDS ||
                 value == Value.REVERSE ||
-                value == Value.SKIP;
+                value == Value.SKIP ||
+                value == Value.FLIP;
     }
 
     /**
